@@ -3,13 +3,14 @@ import UserIcon from "../common/userIcon";
 
 const Header = () => {
   return (
-    <header className="p-8 w-full bg-cyan-100 text-black flex justify-between">
+    <header className="p-8 w-full bg-indigo-500 text-white flex justify-between items-center shadow-lg">
       <div className="left">
-        <Link href="/"> Home </Link>
+        <Link href="/" className="text-lg font-semibold hover:text-indigo-300 transition duration-300">
+          Home
+        </Link>
       </div>
       <div className="right w-1/5 flex justify-around">
-        {/* use UserIcon with size props here: */}
-        <UserIcon/>
+        <UserIcon className="h-8 w-8" />
       </div>
     </header>
   );
