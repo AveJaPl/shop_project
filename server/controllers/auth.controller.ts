@@ -9,7 +9,6 @@ const prisma = new PrismaClient();
 const login = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
-    console.log("email", email, "password", password);
     if (!email || !password) {
       return res.status(400).json({ message: "Provide email and password." });
     }
@@ -35,16 +34,12 @@ const login = async (req: Request, res: Response) => {
         expiresIn: "1d",
       }
     );
-    console.log("\n\n\n")
-
-    console.log("tokenLogin", token)
     res.cookie('token', token, {
       httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24,
       sameSite: "lax",
       path: "/"
     })
-    console.log("\n\n\n")
 
     res.json({ message: "Login successful." });
 
@@ -57,7 +52,6 @@ const login = async (req: Request, res: Response) => {
 const register = async (req: Request, res: Response) => {
   try {
     const { name, surname, email, password } = req.body;
-    console.log("email", email, "password", password, "name", name, "surname", surname)
     if (!email || !password) {
       return res.status(400).json({ message: "Provide email and password." });
     }
@@ -91,9 +85,6 @@ const register = async (req: Request, res: Response) => {
   }
 };
 
-const logout = (req: Request, res: Response) => {
-  res.send("Logout successful.");
-};
 
 const resetPassword = (req: Request, res: Response) => {
   res.send("Reset Password endpoint.");
@@ -102,6 +93,5 @@ const resetPassword = (req: Request, res: Response) => {
 export {
   login,
   register,
-  logout,
   resetPassword
 };

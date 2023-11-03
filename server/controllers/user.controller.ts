@@ -1,6 +1,5 @@
 import { Response, Request } from "express";
 import { PrismaClient } from "@prisma/client";
-import jwt from "jsonwebtoken";
 
 const prisma = new PrismaClient();
 
@@ -21,7 +20,7 @@ const getUserData = async (req: Request, res: Response) => {
 
         if (!user) return res.status(404).json({ message: "User not found" });
 
-        res.status(200).json({ user });
+        res.status(200).json({...user});
 
 
     } catch (error) {

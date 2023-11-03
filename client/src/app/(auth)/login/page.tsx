@@ -59,6 +59,7 @@ const Login = () => {
                             type="email"
                             name="email"
                             id="email"
+                            autoComplete="email"
                             value={email}
                             onChange={e => setEmail(e.target.value)}
                             className="mt-1 p-2 w-full border rounded-md"
@@ -71,6 +72,7 @@ const Login = () => {
                             type="password"
                             name="password"
                             id="password"
+                            autoComplete="current-password"
                             value={password}
                             onChange={e => setPassword(e.target.value)}
                             className="mt-1 p-2 w-full border rounded-md text-black-500"
@@ -89,7 +91,7 @@ const Login = () => {
                     </div>
                 </form>
                 <div className="mt-4">
-                    <span className="text-sm text-gray-600">Don't have an account? </span>
+                    <span className="text-sm text-gray-600">Don&apos;t have an account? </span>
                     <a href="/register" className="text-blue-500 hover:underline text-sm">Register</a>
                 </div>
             </div>

@@ -41,6 +41,7 @@ const Register = () => {
                             type="text"
                             name="name"
                             id="name"
+                            autoComplete="name"
                             value={name}
                             onChange={e => setName(e.target.value)}
                             className="mt-1 p-2 w-full border rounded-md"
@@ -53,6 +54,7 @@ const Register = () => {
                             type="text"
                             name="surname"
                             id="surname"
+                            autoComplete="surname"
                             value={surname}
                             onChange={e => setSurname(e.target.value)}
                             className="mt-1 p-2 w-full border rounded-md"
@@ -65,6 +67,7 @@ const Register = () => {
                             type="email"
                             name="email"
                             id="email"
+                            autoComplete="email"
                             value={email}
                             onChange={e => setEmail(e.target.value)}
                             className="mt-1 p-2 w-full border rounded-md"
@@ -77,6 +80,7 @@ const Register = () => {
                             type="password"
                             name="password"
                             id="password"
+                            autoComplete="current-password"
                             value={password}
                             onChange={e => setPassword(e.target.value)}
                             className="mt-1 p-2 w-full border rounded-md"
