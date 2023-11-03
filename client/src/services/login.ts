@@ -5,6 +5,8 @@ export const loginUser = async (email: string, password: string) => {
         const res = await axios.post('http://localhost:4000/auth/login', {
             email,
             password,
+        }, {
+            withCredentials: true,
         });
         return {
             data: res.data,

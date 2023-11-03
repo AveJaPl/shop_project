@@ -5,6 +5,7 @@ import jwt from "jsonwebtoken";
 
 const prisma = new PrismaClient();
 
+
 const login = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
@@ -28,14 +29,24 @@ const login = async (req: Request, res: Response) => {
     }
 
     const token = jwt.sign(
-      { id: user.id, email: user.email },
+      { id: user.id, email: user.email, admin: user.isAdmin },
       process.env.JWT_SECRET,
       {
         expiresIn: "1d",
       }
     );
+    console.log("\n\n\n")
 
-    res.json({ token });
+    console.log("tokenLogin", token)
+    res.cookie('token', token, {
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 24,
+      sameSite: "lax",
+      path: "/"
+    })
+    console.log("\n\n\n")
+
+    res.json({ message: "Login successful." });
 
   } catch (error) {
     console.error(error);

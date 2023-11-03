@@ -5,7 +5,7 @@ import IUserIconProps from "@/types/IUserIconProps";
 
 const UserIcon: React.FC<IUserIconProps> = ({ className = '' }) => {
   return (
-    <Link href="/login">
+    <Link href="/dashboard">
       <FontAwesomeIcon className={className} icon={faUser} />
     </Link>
   );
