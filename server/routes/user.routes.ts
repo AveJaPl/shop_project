@@ -4,7 +4,7 @@ import verifyJWT from '../middleware/verifyJWT';
 import { logout } from '../controllers/logout.controller';
 const router = express.Router();
 
-router.post('/data', verifyJWT, getUserData);
-router.post('/logout', verifyJWT, logout);
+router.post('/data', verifyJWT(), getUserData);
+router.post('/logout', verifyJWT(), logout);
 
 export default router;
