@@ -1,10 +1,18 @@
+import { NextPage } from "next";
 import React from "react";
-const Home = () => {
+import BestSellers from "../components/layout/bestsellers";
+import NewArrivals from "../components/layout/newarrivals";
+import RecommendedProducts from "../components/layout/recommendedproducts";
+
+const Home: NextPage = () => {
   return (
-    <>
-      <h1>Home</h1>
-    </>
-  );
+      <div className="container mx-auto px-4">
+        <NewArrivals />
+        <BestSellers />
+        <RecommendedProducts />
+
+      </div>
+    );
 };
 
 export default Home;
