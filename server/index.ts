@@ -3,6 +3,7 @@ import authRoutes from "./routes/auth.routes";
 import profileRoutes from "./routes/profile.routes";
 import productRoutes from "./routes/product.routes";
 import userRoutes from "./routes/user.routes";
+import categoryRoutes from './routes/category.routes'
 
 import cors from "cors";
 const PORT = 4000;
@@ -27,6 +28,7 @@ app.use("/auth", authRoutes);
 app.use("/profile", profileRoutes);
 app.use("/products", productRoutes);
 app.use("/user", userRoutes);
+app.use("/category", categoryRoutes);
 
 
 
