@@ -29,6 +29,9 @@ model Product {
   description String
   price       Float
   categoryId  Int
+  countInStock Int
+  rating      Float
+  numReviews  Int
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
