@@ -7,7 +7,7 @@ const router = express.Router();
 router.get("/", getProducts);
 router.get("/:productId", getProductById);
 
-router.post("/", verifyJWT(true), addProduct);
+router.post("/", addProduct);
 router.delete("/:productId", deleteProduct);
 router.put("/:productId", updateProduct);
 
