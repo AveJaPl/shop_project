@@ -15,6 +15,7 @@ const getUserData = async (req: Request, res: Response) => {
                 email: true,
                 name: true,
                 id: true,
+                isAdmin: true,
             },
         });
 

@@ -9,6 +9,7 @@ interface User {
   email: string;
   id: number;
   name: string;
+  isAdmin: boolean;
 }
 
 function Dashboard() {

@@ -3,11 +3,13 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import AdminPanel from "@/components/layout/adminpanel";
 
 interface User {
   email: string;
   id: number;
   name: string;
+  isAdmin: boolean;
 }
 
 const DashboardComponent: React.FC<{ user: User }> = ({ user }) => {
@@ -39,7 +41,7 @@ const DashboardComponent: React.FC<{ user: User }> = ({ user }) => {
           {user && (
             <div className="bg-blue-100 p-4 rounded-xl mb-6 space-y-4">
               <h2 className="text-lg font-semibold mb-2">
-                Welcome, {user.name}
+                Welcome{user.isAdmin && ' Admin'}, {user.name}
               </h2>
               <p className="text-gray-600">Your email is {user.email}</p>
             </div>
@@ -63,6 +65,17 @@ const DashboardComponent: React.FC<{ user: User }> = ({ user }) => {
             >
               Settings
             </button>
+            {
+              user.isAdmin && (
+
+                <button
+              onClick={() => handlePageChange("admin")}
+              className="text-left block w-full text-lg font-semibold bg-blue-50 p-4 rounded-lg hover:bg-blue-100 transition"
+            >
+              Admin Panel
+            </button>
+              )
+            }
           </div>
         </div>
         <div>
@@ -79,6 +92,7 @@ const DashboardComponent: React.FC<{ user: User }> = ({ user }) => {
           {selectedPage === "orders" && <OrdersComponent />}
           {selectedPage === "reviews" && <ReviewsComponent />}
           {selectedPage === "settings" && <SettingsComponent />}
+          {selectedPage === "admin" && <AdminPanel />}
         </div>
       </div>
     </div>
@@ -96,5 +110,6 @@ function ReviewsComponent() {
 function SettingsComponent() {
   return <div>Tutaj będą ustawienia użytkownika.</div>;
 }
+
 
 export default DashboardComponent;
