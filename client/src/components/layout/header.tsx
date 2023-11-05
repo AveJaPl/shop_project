@@ -104,7 +104,7 @@ const Header = () => {
         <div
           onClick={() => setIsMenuOpen(true)}
           ref={menuRef} // referencja do tego kontenera
-          className="relative first-letter:"
+          className="relative"
         >
           <button className={linkStyle}>Categories</button>
           {isMenuOpen && (

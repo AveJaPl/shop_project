@@ -48,10 +48,11 @@ const AdminPanel: React.FC = () => {
             <div className="flex flex-col space-y-2">
               {Object.entries(actionButtonsConfig).map(
                 ([action, { label, color }]) => (
+                  
                   <button
                     key={action}
                     onClick={() => handleActionSelect(action as IAdminAction)}
-                    className={`bg-${color}-500 text-white py-2 px-4 rounded hover:bg-${color}-600`}
+                    className={`btn-${color}`}
                   >
                     {label}
                   </button>
