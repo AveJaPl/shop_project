@@ -201,10 +201,17 @@ const getBestSellerProducts = async (req: Request, res: Response) => {
           in: bestSellers.map((product) => product.productId),
         },
       },
+      
+
     });
 
-    res.json(bestSellingProducts as ResponseProduct[]);
+    const productsMap = new Map<number, number>(bestSellers.map((product) => [product.productId, product._sum?.quantity as number]));
 
+    const sortedData = bestSellingProducts.sort((a, b) => {
+      return (productsMap.get(b.id) as number || 0) - (productsMap.get(a.id) as number || 0);
+    });
+
+    res.json(sortedData as ResponseProduct[]);
 
 
   } catch (error) {
