@@ -63,7 +63,6 @@ const ProductForm: React.FC<IProductFormProps> = ({ onSubmit, formType }) => {
           ...formData,
         };
         await AddProduct(productToAdd as IAddedProduct);
-        router.push('/dashboard')
 
       } else if (formType === "edit" && selectedProduct) {
         const category = categories.find((c)=>c.id === selectedProduct.categoryId);
@@ -78,11 +77,9 @@ const ProductForm: React.FC<IProductFormProps> = ({ onSubmit, formType }) => {
           additionalQuantity: formData.quantity,
         };
         await UpdateProduct(selectedProduct.id as number, productToUpdate as IModifiedProduct);
-        router.push('/dashboard')
         
       } else if (formType === "delete" && selectedProduct) {
         await DeleteProduct(selectedProduct.id!);
-        router.push('/dashboard')
 
       }
       onSubmit(event);
