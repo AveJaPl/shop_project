@@ -1,29 +1,33 @@
 import { Request, Response } from "express";
 import { Category, PrismaClient } from "@prisma/client";
-import { IModifiedProduct, IAddedProduct, ResponseProduct } from "../types/Product";
+import {
+  IModifiedProduct,
+  IAddedProduct,
+  ResponseProduct,
+} from "../types/Product";
 const prisma = new PrismaClient();
 
 const addProduct = async (req: Request, res: Response) => {
-  try{
-    console.log(req.body)
-    const { name,  description, price, category, quantity }: IAddedProduct = req.body;
+  try {
+    const { name, description, price, category, quantity }: IAddedProduct =
+      req.body;
 
     const dbCategory = await prisma.category.findFirst({
-      where:{
-        name: category
-      }
-    })
-    let acceptedCategory
-    if(!dbCategory){
-      const newCategory = await prisma.category.create({
-        data:{
-          name: category
-        }
-      }) as Category
+      where: {
+        name: category,
+      },
+    });
+    let acceptedCategory;
+    if (!dbCategory) {
+      const newCategory = (await prisma.category.create({
+        data: {
+          name: category,
+        },
+      })) as Category;
 
-      acceptedCategory = newCategory.id
-    } else{
-      acceptedCategory = dbCategory.id
+      acceptedCategory = newCategory.id;
+    } else {
+      acceptedCategory = dbCategory.id;
     }
 
     const product = await prisma.product.create({
@@ -32,7 +36,7 @@ const addProduct = async (req: Request, res: Response) => {
         price: parseFloat(price.toString()),
         description: description,
         categoryId: acceptedCategory,
-        countInStock: parseInt(quantity.toString())
+        countInStock: parseInt(quantity.toString()),
       },
     });
     res.json(product);
@@ -44,8 +48,7 @@ const addProduct = async (req: Request, res: Response) => {
 
 const deleteProduct = async (req: Request, res: Response) => {
   try {
-    console.log(req.params)
-    const {productId} = req.params;
+    const { productId } = req.params;
     const product = await prisma.product.delete({
       where: {
         id: parseInt(productId),
@@ -59,46 +62,49 @@ const deleteProduct = async (req: Request, res: Response) => {
 };
 
 const updateProduct = async (req: Request, res: Response) => {
-  try{
-    console.log(req.body)
-    const {id,name, description, price,category,additionalQuantity}: IModifiedProduct = req.body
+  try {
+    const {
+      id,
+      name,
+      description,
+      price,
+      category,
+      additionalQuantity,
+    }: IModifiedProduct = req.body;
 
     const dbCategory = await prisma.category.findFirst({
-      where:{
-        name: category
-      }
-    })
-    let acceptedCategory
-    if(!dbCategory){
+      where: {
+        name: category,
+      },
+    });
+    let acceptedCategory;
+    if (!dbCategory) {
       const newCategory = await prisma.category.create({
-        data:{
-          name: category
-        }
-      })
+        data: {
+          name: category,
+        },
+      });
 
-      acceptedCategory = newCategory.id
-    } else{
-      acceptedCategory = dbCategory.id
+      acceptedCategory = newCategory.id;
+    } else {
+      acceptedCategory = dbCategory.id;
     }
     const updatedProduct = await prisma.product.update({
-      where:{
-        id: id
+      where: {
+        id: id,
       },
-      data:{
+      data: {
         name,
         description,
         price: parseFloat(price.toString()),
         categoryId: acceptedCategory,
-        countInStock:{
-          increment: parseInt(additionalQuantity.toString())
-        }
-      }
-    })
+        countInStock: {
+          increment: parseInt(additionalQuantity.toString()),
+        },
+      },
+    });
 
     res.json(updatedProduct);
-
-
-
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Something went wrong" });
@@ -117,10 +123,10 @@ const getProducts = async (req: Request, res: Response) => {
 
 const getProductById = async (req: Request, res: Response) => {
   try {
-    const prodId = parseInt(req.params.id);
+    const { productId } = req.params;
     const product = await prisma.product.findUnique({
       where: {
-        id: prodId,
+        id: parseInt(productId),
       },
     });
     res.json(product as ResponseProduct);
@@ -130,21 +136,21 @@ const getProductById = async (req: Request, res: Response) => {
   }
 };
 
-const getCategoryById = async(req: Request, res: Response) =>{
-  try{
-    const catId = parseInt(req.params.categoryId)
+const getCategoryById = async (req: Request, res: Response) => {
+  try {
+    const catId = parseInt(req.params.categoryId);
     const category = await prisma.category.findUnique({
-      where:{
-        id: catId
-      }
-    })
+      where: {
+        id: catId,
+      },
+    });
 
-    res.json(category as Category)
-  } catch(error){
-    console.error(error)
-    res.status(500).json({message: "Something went wrong"})
+    res.json(category as Category);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Something went wrong" });
   }
-}
+};
 
 const getCategories = async (req: Request, res: Response) => {
   try {
@@ -156,6 +162,67 @@ const getCategories = async (req: Request, res: Response) => {
   }
 };
 
+const getNewArrivalProducts = async (req: Request, res: Response) => {
+  try {
+    const products = await prisma.product.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+      take: 6,
+    });
+    res.json(products as ResponseProduct[]);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Something went wrong" });
+  }
+};
+
+const getBestSellerProducts = async (req: Request, res: Response) => {
+  try {
+    const bestSellers = await prisma.productOrder.groupBy({
+      by: ["productId"],
+      _sum: {
+        quantity: true,
+      },
+      _count: {
+        productId: true,
+      },
+      orderBy: {
+        _sum: {
+          quantity: "desc",
+        },
+      },
+      take: 6,
+    });
+
+    const bestSellingProducts = await prisma.product.findMany({
+      where: {
+        id: {
+          in: bestSellers.map((product) => product.productId),
+        },
+      },
+    });
+
+    res.json(bestSellingProducts as ResponseProduct[]);
+
+
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Something went wrong" });
+  }
+}
+
+
+const getRecommendedProducts = async (req: Request, res: Response) => {
+  try {
+    res.send("getRecommendedProducts");
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Something went wrong" });
+  }
+}
+
 export {
   addProduct,
   deleteProduct,
@@ -163,5 +230,8 @@ export {
   getProducts,
   getProductById,
   getCategories,
-  getCategoryById
+  getCategoryById,
+  getNewArrivalProducts,
+  getBestSellerProducts,
+  getRecommendedProducts
 };
