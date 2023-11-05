@@ -1,6 +1,19 @@
-interface Category {
+interface IResponseCategory {
     id: number;
     name: string;
 }
 
-export default Category;
+interface ICategoriesWithSubcategories extends IResponseCategory{
+    subcategories: IResponseSubcategory[];
+}
+
+interface IResponseSubcategory extends IResponseCategory {
+    categoryId: number;
+}
+
+
+export type{
+    IResponseCategory,
+    ICategoriesWithSubcategories,
+    IResponseSubcategory
+}

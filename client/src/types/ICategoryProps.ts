@@ -1,8 +1,7 @@
+import { IResponseCategory } from "./Category";
 
 interface ICategoryProps {
-    title : string;
-    icon : JSX.Element;
-    subcategories : {name: string, href: string}[];
+    name : string;
     onMouseEnter : () => void;
 }
 

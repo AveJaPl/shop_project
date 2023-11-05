@@ -8,7 +8,7 @@ const getUserData = async (req: Request, res: Response) => {
         const userId = req.user?.id;
         if (!userId) return res.status(401).json({ message: "Unauthorized" });
 
-        const user = await prisma.user.findUnique({
+        const user = await prisma.users.findUnique({
             where: {
                 id: userId,
             }, select: {

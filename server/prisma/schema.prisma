@@ -10,7 +10,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
+model Users {
   id        Int      @id @default(autoincrement())
   name      String
   surname   String
@@ -19,30 +19,31 @@ model User {
   createdAt DateTime @default(now())
   isAdmin  Boolean  @default(false)
 
-  orders    Order[]
-  reviews   Review[]
+  orders    Orders[]
+  reviews   Reviewes[]
 
 }
 
-model Product {
+model Products {
   id          Int       @id @default(autoincrement())
   name        String
   description String
   price       Float
   categoryId  Int
+  subCategoryId Int?
   countInStock Int
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt()
 
-  category Category @relation(fields: [categoryId], references: [id])
-
-  images      Image[]
-  productOrder ProductOrder[]
-  reviews     Review[]
+  category Categories @relation(fields: [categoryId], references: [id])
+  subCategory SubCategories? @relation(fields: [subCategoryId], references: [id])
+  images      Images[]
+  productOrder OrderDetails[]
+  reviews     Reviewes[]
 
 }
 
-model Review{
+model Reviewes{
   id        Int       @id @default(autoincrement())
   productId Int
   userId    Int
@@ -51,23 +52,33 @@ model Review{
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt()
 
-  product Product @relation(fields: [productId], references: [id])
-  user User @relation(fields: [userId], references: [id])
+  product Products @relation(fields: [productId], references: [id])
+  user Users @relation(fields: [userId], references: [id])
 }
 
-model Category {
+model Categories {
   id       Int       @id @default(autoincrement())
   name     String
 
-  products Product[]
+  products Products[]
+  subCategories SubCategories[]
 }
 
-model Image {
+model SubCategories {
+  id       Int       @id @default(autoincrement())
+  name     String
+  categoryId Int
+
+  category Categories @relation(fields: [categoryId], references: [id])
+  products Products[]
+}
+
+model Images {
   id        Int       @id @default(autoincrement())
   url       String
   productId Int
 
-  product Product @relation(fields: [productId], references: [id])
+  product Products @relation(fields: [productId], references: [id])
 }
 
 enum OrderStatus {
@@ -77,25 +88,25 @@ enum OrderStatus {
   CANCELLED
 }
 
-model Order {
+model Orders {
   id        Int       @id @default(autoincrement())
   userId    Int
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   status    OrderStatus    @default(PENDING)
 
-  products  ProductOrder[]
-  user      User      @relation(fields: [userId], references: [id])  
+  products  OrderDetails[]
+  user      Users      @relation(fields: [userId], references: [id])  
 }
 
-model ProductOrder{
+model OrderDetails{
   id        Int       @id @default(autoincrement())
   orderId   Int
   productId Int
   quantity  Int
 
-  product Product @relation(fields: [productId], references: [id])
-  order Order @relation(fields: [orderId], references: [id])
+  product Products @relation(fields: [productId], references: [id])
+  order Orders @relation(fields: [orderId], references: [id])
 
 }
 

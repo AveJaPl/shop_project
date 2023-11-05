@@ -26,6 +26,7 @@ const ProductForm: React.FC<IProductFormProps> = ({ onSubmit, formType }) => {
 
   const labelStyle = "block text-sm font-medium text-gray-700";
   const inputStyle = "mt-1 p-2 border rounded w-full";
+  
   useEffect(() => {
     GetAllCategories().then(setCategories);
     if (formType !== "add") {

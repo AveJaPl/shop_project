@@ -14,7 +14,7 @@ const ProductCard: React.FC<Product> = ({ ...product }) => {
 
   const handleClick = () => {
     const slug = createSlug(product.name, product.id)
-    router.push(`/products/${slug}`);
+    router.push(`/product/${slug}`);
   };
   return (
     <div onClick={handleClick} className=" mx-1.5 border px-4 py-2 rounded-lg">

@@ -1,27 +1,24 @@
-interface ResponseProduct {
-    id: number;
+interface BaseProduct {
     name: string;
     description: string;
     price: number;
+}
+
+interface ResponseProduct extends BaseProduct {
+    id: number;
     categoryId: number;
     countInStock: number;
     createdAt: Date;
     updatedAt: Date;
 }
 
-interface IModifiedProduct {
+interface IModifiedProduct extends BaseProduct{
     id: number;
-    name: string;
-    description: string;
-    price: number;
     category: string;
     additionalQuantity: number;
 }
 
-interface IAddedProduct{
-    name: string,
-    description: string,
-    price: number,
+interface IAddedProduct extends BaseProduct{
     category: string,
     quantity: number
 }

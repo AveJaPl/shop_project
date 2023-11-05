@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { IAddedProduct, IModifiedProduct, Product } from '@/types/product';
-import Category from '@/types/Category';
+import { IResponseCategory, ICategoriesWithSubcategories } from '@/types/Category';
 
 const getAllProducts = async (): Promise<Product[]> => {
     const response = await axios.get('http://localhost:4000/products');
@@ -26,14 +26,14 @@ const UpdateProduct = async (oldProductId: number, product: IModifiedProduct): P
     return response.data as Product
 }
 
-const GetAllCategories = async (): Promise<Category[]> => {
+const GetAllCategories = async (): Promise<IResponseCategory[]> => {
     const response = await axios.get('http://localhost:4000/category');
-    return response.data as Category[];
+    return response.data as IResponseCategory[];
 }
 
-const GetCategoryById = async(categoryId: number): Promise<Category>=>{
+const GetCategoryById = async(categoryId: number): Promise<IResponseCategory>=>{
     const response = await axios.get(`http://localhost:4000/category/${categoryId}`)
-    return response.data as Category
+    return response.data as IResponseCategory
 }
 
 const getNewArrivalProducts = async (): Promise<Product[]> => {
@@ -52,6 +52,12 @@ const getRecommendedProducts = async (): Promise<Product[]> => {
     return response.data as Product[]
 }
 
+
+const getCategoriesWithSubcategories = async (): Promise<ICategoriesWithSubcategories[]> => {
+    const response = await axios.get('http://localhost:4000/category/categorieswithsubcategories');
+    return response.data as ICategoriesWithSubcategories[];
+}
+
 export {
     getAllProducts,
     getProductById,
@@ -62,5 +68,6 @@ export {
     GetCategoryById,
     getNewArrivalProducts,
     getBestSellerProducts,
-    getRecommendedProducts
+    getRecommendedProducts,
+    getCategoriesWithSubcategories
 }

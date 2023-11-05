@@ -13,7 +13,7 @@ const login = async (req: Request, res: Response) => {
       return res.status(400).json({ message: "Provide email and password." });
     }
 
-    const user = await prisma.user.findUnique({
+    const user = await prisma.users.findUnique({
       where: {
         email,
       },
@@ -56,7 +56,7 @@ const register = async (req: Request, res: Response) => {
       return res.status(400).json({ message: "Provide email and password." });
     }
 
-    const existingUser = await prisma.user.findUnique({
+    const existingUser = await prisma.users.findUnique({
       where: {
         email,
       },
@@ -68,7 +68,7 @@ const register = async (req: Request, res: Response) => {
 
     const hashedPassword = bcrypt.hashSync(password, 10);
 
-    const newUser = await prisma.user.create({
+    const newUser = await prisma.users.create({
       data: {
         name,
         surname,
