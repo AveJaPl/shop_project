@@ -12,17 +12,17 @@ const getProductById = async (id: number): Promise<Product> => {
 }
 
 const AddProduct = async (product: IAddedProduct): Promise<Product> => {
-    const response = await axios.post('http://localhost:4000/products/', product);
+    const response = await axios.post('http://localhost:4000/products/', product, { withCredentials: true });
     return response.data as Product
 }
 
 const DeleteProduct = async (id: number): Promise<Product> => {
-    const response = await axios.delete(`http://localhost:4000/products/${id}`);
+    const response = await axios.delete(`http://localhost:4000/products/${id}`, {withCredentials: true});
     return response.data as Product
 }
 
 const UpdateProduct = async (oldProductId: number, product: IModifiedProduct): Promise<Product> => {
-    const response = await axios.put(`http://localhost:4000/products/${oldProductId}`, product);
+    const response = await axios.put(`http://localhost:4000/products/${oldProductId}`, product, { withCredentials: true });
     return response.data as Product
 }
 

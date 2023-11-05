@@ -12,9 +12,9 @@ router.get("/", getProducts);
 
 
 router.get("/:productId", getProductById);
-router.post("/", addProduct);
-router.delete("/:productId", deleteProduct);
-router.put("/:productId", updateProduct);
+router.post("/",verifyJWT(true), addProduct);
+router.delete("/:productId",verifyJWT(true), deleteProduct);
+router.put("/:productId",verifyJWT(true), updateProduct);
 
 
 export default router;
