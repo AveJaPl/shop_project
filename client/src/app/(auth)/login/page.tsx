@@ -10,8 +10,6 @@ const Login = () => {
     const [error, setError] = useState<string
         | null>(null);
 
-    const [auth, setAuth] = useState(false);
-    const [token, setToken] = useState("");
 
     const router = useRouter();
 
@@ -24,8 +22,6 @@ const Login = () => {
 
             if (response.status === 200) {
                 console.log("token:", response.data.token);
-                setToken(response.data.token);
-                setAuth(true);
                 router.push('/dashboard');
             } else {
                 setError(response.data.message || 'An error occurred');
@@ -38,7 +34,6 @@ const Login = () => {
 
 
     }
-
 
     const handleForgotPassword = () => {
 
