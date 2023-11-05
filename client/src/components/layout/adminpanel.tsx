@@ -6,10 +6,8 @@ import PromoCodeForm from "../common/promoCodeForm";
 import IAdminAction from "@/types/IAdminAction";
 import actionButtonsConfig from "@/types/ActionButtonConfig";
 
-
 const AdminPanel: React.FC = () => {
   const [selectedAction, setSelectedAction] = useState<string | null>(null);
-
   const handlePageChange = (action: string) => {
     setSelectedAction(action);
   };
@@ -17,6 +15,7 @@ const AdminPanel: React.FC = () => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     console.log("Form submitted for action:", selectedAction);
+    setSelectedAction(null)
     // Process the form here (e.g., call an API)
   };
 
@@ -47,19 +46,22 @@ const AdminPanel: React.FC = () => {
           <>
             <p>Here you can manage the products in the store.</p>
             <div className="flex flex-col space-y-2">
-              {Object.entries(actionButtonsConfig).map(([action, {label, color}]) => (
-                <button
-                  key={action}
-                  onClick={() => handleActionSelect(action as IAdminAction)}
-                  className={`bg-${color}-500 text-white py-2 px-4 rounded hover:bg-${color}-600`}
-                >
-                  {label}
-                </button>
-              ))    
-            }
+              {Object.entries(actionButtonsConfig).map(
+                ([action, { label, color }]) => (
+                  <button
+                    key={action}
+                    onClick={() => handleActionSelect(action as IAdminAction)}
+                    className={`bg-${color}-500 text-white py-2 px-4 rounded hover:bg-${color}-600`}
+                  >
+                    {label}
+                  </button>
+                )
+              )}
             </div>
           </>
-        ) : renderForm()}
+        ) : (
+          renderForm()
+        )}
         {selectedAction && (
           <button
             onClick={() => setSelectedAction(null)}
@@ -74,4 +76,3 @@ const AdminPanel: React.FC = () => {
 };
 
 export default AdminPanel;
-
