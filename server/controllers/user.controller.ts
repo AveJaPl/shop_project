@@ -12,9 +12,10 @@ const getUserData = async (req: Request, res: Response) => {
             where: {
                 id: userId,
             }, select: {
-                email: true,
-                name: true,
                 id: true,
+                name: true,
+                surname: true,
+                email: true,
                 isAdmin: true,
             },
         });
