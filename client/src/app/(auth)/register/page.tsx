@@ -21,7 +21,11 @@ const Register = () => {
         try {
             const response = await registerUser(name, surname, email, password);
             console.log(response.data);
-            router.push('/dashboard');
+            if (response.success) {
+                router.push('/dashboard')
+            } else {
+                setError(response.data.message || "An error occurred")
+            }
         } catch (err: any) {
             setError(err.message || 'An error occurred');
         } finally {

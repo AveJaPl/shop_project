@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import IProductFormProps from "@/types/IProductFormProps";
-import Category from "@/types/Category";
+import { IResponseCategory } from "@/types/Category";
 import { IAddedProduct, IModifiedProduct, Product } from "@/types/product";
 import {
   getAllProducts,
@@ -13,7 +13,7 @@ import { useRouter } from "next/navigation";
 
 const ProductForm: React.FC<IProductFormProps> = ({ onSubmit, formType }) => {
   const [products, setProducts] = useState<Product[]>([]);
-  const [categories, setCategories] = useState<Category[]>([]);
+  const [categories, setCategories] = useState<IResponseCategory[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [formData, setFormData] = useState({
     name: "",
@@ -26,7 +26,7 @@ const ProductForm: React.FC<IProductFormProps> = ({ onSubmit, formType }) => {
 
   const labelStyle = "block text-sm font-medium text-gray-700";
   const inputStyle = "mt-1 p-2 border rounded w-full";
-  
+
   useEffect(() => {
     GetAllCategories().then(setCategories);
     if (formType !== "add") {
@@ -38,7 +38,7 @@ const ProductForm: React.FC<IProductFormProps> = ({ onSubmit, formType }) => {
   const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const productId = event.target.value;
     const product = products.find((p) => p.id!.toString() === productId);
-    const category = categories.find((c)=>c.id === product?.categoryId);
+    const category = categories.find((c) => c.id === product?.categoryId);
     setSelectedProduct(product || null);
     if (product) {
       setFormData({
@@ -59,31 +59,31 @@ const ProductForm: React.FC<IProductFormProps> = ({ onSubmit, formType }) => {
 
   const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-      if (formType === "add") {
-        const productToAdd = {
-          ...formData,
-        };
-        await AddProduct(productToAdd as IAddedProduct);
+    if (formType === "add") {
+      const productToAdd = {
+        ...formData,
+      };
+      await AddProduct(productToAdd as IAddedProduct);
 
-      } else if (formType === "edit" && selectedProduct) {
-        const category = categories.find((c)=>c.id === selectedProduct.categoryId);
-        const productToUpdate = {
-          ...selectedProduct,
-          ...formData,
-          id: selectedProduct.id,
-          price: formData.price === 0 ? selectedProduct.price : formData.price,
-          name: formData.name === "" ? selectedProduct.name : formData.name,
-          description: formData.description === "" ? selectedProduct.description : formData.description,
-          category: formData.category === "" ? category?.name || "Bez Kategorii" : formData.category,
-          additionalQuantity: formData.quantity,
-        };
-        await UpdateProduct(selectedProduct.id as number, productToUpdate as IModifiedProduct);
-        
-      } else if (formType === "delete" && selectedProduct) {
-        await DeleteProduct(selectedProduct.id!);
+    } else if (formType === "edit" && selectedProduct) {
+      const category = categories.find((c) => c.id === selectedProduct.categoryId);
+      const productToUpdate = {
+        ...selectedProduct,
+        ...formData,
+        id: selectedProduct.id,
+        price: formData.price === 0 ? selectedProduct.price : formData.price,
+        name: formData.name === "" ? selectedProduct.name : formData.name,
+        description: formData.description === "" ? selectedProduct.description : formData.description,
+        category: formData.category === "" ? category?.name || "Bez Kategorii" : formData.category,
+        additionalQuantity: formData.quantity,
+      };
+      await UpdateProduct(selectedProduct.id as number, productToUpdate as IModifiedProduct);
 
-      }
-      onSubmit(event);
+    } else if (formType === "delete" && selectedProduct) {
+      await DeleteProduct(selectedProduct.id!);
+
+    }
+    onSubmit(event);
   };
 
   return (
@@ -169,7 +169,7 @@ const ProductForm: React.FC<IProductFormProps> = ({ onSubmit, formType }) => {
             className={inputStyle}
             value={formData.quantity}
             onChange={handleInputChange}
-            />
+          />
         </>
       )}
       <button
@@ -179,8 +179,8 @@ const ProductForm: React.FC<IProductFormProps> = ({ onSubmit, formType }) => {
         {formType === "add"
           ? "Add Product"
           : formType === "edit"
-          ? "Save Changes"
-          : "Delete Product"}
+            ? "Save Changes"
+            : "Delete Product"}
       </button>
     </form>
   );

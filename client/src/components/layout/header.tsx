@@ -22,8 +22,14 @@ const Header = () => {
     const fetchCategories = async () => {
       try {
         const response = await getCategoriesWithSubcategories();
-        setCategoriesWithSubcategories(response);
-        setActiveSubcategories(response[0].subcategories)
+        if (response) {
+          setCategoriesWithSubcategories(response);
+          setActiveSubcategories(response[0].subcategories)
+        } else {
+          setCategoriesWithSubcategories([])
+          setActiveSubcategories([])
+        }
+
       } catch (err) {
         console.error(err);
       }
@@ -88,18 +94,18 @@ const Header = () => {
                 ))}
               </div>
               <div className="w-1/2 bg-indigo-600 rounded-e-md">
-                  {activeSubcategories.length > 0 && (
-                    <div className="w-full">
-                      {activeSubcategories.map((subcategory) => (
-                        <div
-                          key={subcategory.id}
-                          className=" w-full px-8 py-2 text-white hover:rounded-e-md hover:bg-indigo-400"
-                        >
-                          {subcategory.name}
-                        </div>
-                      ))}
-                    </div>
-                  )}
+                {activeSubcategories.length > 0 && (
+                  <div className="w-full">
+                    {activeSubcategories.map((subcategory) => (
+                      <div
+                        key={subcategory.id}
+                        className=" w-full px-8 py-2 text-white hover:rounded-e-md hover:bg-indigo-400"
+                      >
+                        {subcategory.name}
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           )}

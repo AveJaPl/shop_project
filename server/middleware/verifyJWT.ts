@@ -17,6 +17,7 @@ declare global {
 
 const verifyJWT = (requireAdmin: boolean = false) => {
   return (req: Request, res: Response, next: NextFunction) => {
+    console.log('sprawdzam token')
     const token = req.cookies.token;
     if (!token) {
       return res.status(401).json({ message: "Unauthorized" });
