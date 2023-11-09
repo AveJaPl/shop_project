@@ -9,7 +9,6 @@ const carouselSettings = {
   slidesToScroll: 1,
   nextArrow: <RightArrow />,
   prevArrow: <LeftArrow />,
-  swipeToSlide: true,
 };
 
 export default carouselSettings;
