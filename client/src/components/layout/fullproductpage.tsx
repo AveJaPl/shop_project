@@ -2,11 +2,11 @@ import React from 'react';
 import { Product } from '@/types/product';
 import Image from 'next/image';
 
-const FullProductPage: React.FC<{ product: Product }> = ({ ...product }) => {
+const FullProductPage: React.FC<{ product: Product }> = ({product }) => {
   const inStock = product.countInStock > 0;
   const stockIndicatorColor = inStock ? 'text-green-500' : 'text-red-500';
   const stockText = inStock ? 'In Stock' : 'Out of Stock';
-
+  const isLongName = product.name.length > 20;
   return (
     <div className="w-2/3 mx-auto p-4 flex flex-col justify-center items-center">
       <div className="w-full bg-white shadow-lg overflow-hidden md:flex">
@@ -22,8 +22,8 @@ const FullProductPage: React.FC<{ product: Product }> = ({ ...product }) => {
         </div>
 
         <div className="md:w-1/2 px-10 py-6 flex flex-col justify-between">
-          <div className='flex flex-col'>
-            <h1 className="text-2xl font-bold truncate">{product.name}</h1>
+          <div className={`flex flex-col ${isLongName ? 'items start' : 'items-end'}`}>
+            <h1 className={`text-2xl font-bold ${isLongName && 'truncate'}`}>{product.name}</h1>
             <div className='flex flex-col items-end'>
               <p className="text-lg font-semibold my-2">{`$${product.price}`}</p>
               <div className='flex items-center'>
