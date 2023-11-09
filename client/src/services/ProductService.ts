@@ -17,7 +17,7 @@ const AddProduct = async (product: IAddedProduct): Promise<Product> => {
 }
 
 const DeleteProduct = async (id: number): Promise<Product> => {
-    const response = await axios.delete(`http://localhost:4000/products/${id}`, {withCredentials: true});
+    const response = await axios.delete(`http://localhost:4000/products/${id}`, { withCredentials: true });
     return response.data as Product
 }
 
@@ -31,7 +31,7 @@ const GetAllCategories = async (): Promise<IResponseCategory[]> => {
     return response.data as IResponseCategory[];
 }
 
-const GetCategoryById = async(categoryId: number): Promise<IResponseCategory>=>{
+const GetCategoryById = async (categoryId: number): Promise<IResponseCategory> => {
     const response = await axios.get(`http://localhost:4000/category/${categoryId}`)
     return response.data as IResponseCategory
 }
