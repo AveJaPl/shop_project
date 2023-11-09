@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
@@ -13,33 +13,59 @@ const getIdFromSlug = (slug: string) => {
   return parseInt(parts.pop() ?? "", 10) || null;
 };
 
+const createSlug = (name: string, id: number) => {
+  return `${name.toLowerCase().split(" ").join("-")}-${id}`;
+};
+
 function ProductPage() {
   const pathname = usePathname();
   const [product, setProduct] = useState<Product | null>(null);
-  const slug = pathname.split("/").pop();
+  const slug = pathname.split("/").pop() || "";
+  const [loadingState, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    if (typeof slug !== "string") return;
+    const fetchProduct = async () => {
+      const id = getIdFromSlug(slug);
+      if (id === null || id < 0 ) {
+        setLoading(false);
+        return;
+      }
 
-    const id = getIdFromSlug(slug);
-    if (id === null) return;
+      try {
+        const response = await getProductById(id);
 
-    (async () => {
-      const response = await getProductById(id);
-      setProduct(response as Product);
-    })();
+        if (!response) {
+          throw new Error("Product not found");
+        }
+        const responseSlug: string = createSlug(response.name, response.id);
+
+        if (responseSlug !== slug) {
+          throw new Error("Product not found");
+        }
+        setProduct(response as Product);
+      } catch (error) {
+        setProduct(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    setLoading(true);
+    fetchProduct();
+
   }, [slug]);
 
   return (
     <div>
       <Suspense fallback={<div>Loading...</div>}>
-        {product ? (
-          <FullProductPage {...product} />
-        ) : (
+        {loadingState ? (
           <div>Loading...</div>
+        ) : product ? (
+          <FullProductPage product={product} />
+        ) : (
+          <div>Product not found</div>
         )}
       </Suspense>
-
     </div>
   );
 }
