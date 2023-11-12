@@ -4,7 +4,7 @@ import profileRoutes from "./routes/profile.routes";
 import productRoutes from "./routes/product.routes";
 import userRoutes from "./routes/user.routes";
 import categoryRoutes from './routes/category.routes'
-
+import cartRoutes from './routes/cart.routes'
 import cors from "cors";
 const PORT = 4000;
 import * as dotenv from "dotenv";
@@ -29,7 +29,7 @@ app.use("/profile", profileRoutes);
 app.use("/products", productRoutes);
 app.use("/user", userRoutes);
 app.use("/category", categoryRoutes);
-
+app.use("/cart", cartRoutes);
 
 
 app.listen(PORT, () => {
