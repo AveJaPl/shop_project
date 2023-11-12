@@ -23,8 +23,24 @@ interface Product extends BaseProduct{
   updatedAt: Date;
 }
 
+type CartProduct = {
+  id: number;
+  name: string;
+  price: number;
+  quantity: number;
+  itemTotal?: number;
+}
+
+
+type ResponseCart = {
+  cartDetails: CartProduct[]; // This should be an array of CartProduct
+  totalValue: number;
+};
+
 export type {
   IModifiedProduct,
   IAddedProduct,
-  Product
+  Product,
+  CartProduct,
+  ResponseCart
 }
