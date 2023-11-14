@@ -1,18 +1,18 @@
 import React from "react";
 import Image from "next/image";
 import { CartProduct } from "@/types/product";
-import { removeFromCart } from "@/services/cart";
+import { getSocket } from "@/services/getSocket";
 
 type CartItemProps = {
   item: CartProduct;
 };
 
 const CartItem: React.FC<CartItemProps> = ({ item }) => {
+  const socket = getSocket();
 
   const handleRemove = async() => {
     try{
-      const response = await removeFromCart(item.id);
-      console.log(response);
+      socket.emit('remove-from-cart', item.id);
     } catch (error) {
       console.log(error);
     }
