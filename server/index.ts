@@ -9,6 +9,8 @@ import cors from "cors";
 const PORT = 4000;
 import * as dotenv from "dotenv";
 import cookieParser from "cookie-parser";
+import { initializeWebsocket } from "./websockets/cart.websocket";
+import { createServer } from "http";
 
 dotenv.config();
 const app = express();
@@ -32,6 +34,10 @@ app.use("/category", categoryRoutes);
 app.use("/cart", cartRoutes);
 
 
-app.listen(PORT, () => {
+const server = createServer(app);
+
+initializeWebsocket(server);
+
+server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
