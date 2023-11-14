@@ -2,28 +2,27 @@
 
 import React, { useState, useEffect } from "react";
 import CartItem from "@/components/common/cartItem";
-import { getCart } from "@/services/cart";
-import { CartProduct } from "@/types/product";
+import { CartProduct, ResponseCart } from "@/types/product";
+import { getSocket } from "@/services/getSocket";
 
 const Cart = () => {
   const [cartItems, setCartItems] = useState<CartProduct[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string>('');
   const [totalPrice, setTotalPrice] = useState(0);
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await getCart();
-        setCartItems(response.cartDetails);
-        setTotalPrice(response.totalValue);
 
-        setIsLoading(false);
-      } catch (error) {
-        setError('error');
-        setIsLoading(false);
-      }
-    }
-    fetchData();
+  const socket = getSocket();
+  useEffect(() => {
+    socket.on('connect', () => {
+      console.log('connected');
+    });
+
+    socket.on('cart-data', (cart: ResponseCart) => {
+      setCartItems(cart.cartDetails);
+      setTotalPrice(cart.totalValue);
+    });
+    
+    socket.emit('get-cart');
     setIsLoading(false);
   },[]);
   return (
