@@ -4,7 +4,8 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import AdminPanel from "@/components/layout/adminpanel";
-
+import { getSocket } from "@/services/getSocket";
+import { closeSocket } from "@/services/getSocket";
 interface User {
   email: string;
   id: number;
@@ -15,6 +16,7 @@ interface User {
 const DashboardComponent: React.FC<{ user: User }> = ({ user }) => {
   const router = useRouter();
   const [selectedPage, setSelectedPage] = useState("orders");
+  const socket = getSocket();
 
   const logout = async () => {
     try {
@@ -23,6 +25,10 @@ const DashboardComponent: React.FC<{ user: User }> = ({ user }) => {
         {},
         { withCredentials: true }
       );
+      const socket = getSocket();
+      socket.emit("logout");
+      closeSocket()
+
       router.push("/");
     } catch (error) {
       console.log(error);
