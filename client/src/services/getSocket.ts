@@ -1,14 +1,22 @@
-import {io} from "socket.io-client";
+import { io } from "socket.io-client";
 
 let socket: any;
 
-const getSocket = () => {
-    if (!socket) {
-        socket = io("http://localhost:4000", {
-            withCredentials: true,
-        });
-    }
-    return socket;
+const getSocket = (login=false) => {
+  if (!socket) {
+    socket = io("http://localhost:4000", { withCredentials: true });
+  }
+  if(socket && login){
+    socket.connect();
+  }
+  return socket;
 };
 
-export { getSocket };
+const closeSocket = () => {
+  if (socket) {
+    socket.disconnect();
+    socket = null;
+  }
+};
+
+export { getSocket, closeSocket };
