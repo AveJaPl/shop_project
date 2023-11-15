@@ -8,23 +8,19 @@ import { getSocket } from "@/services/getSocket";
 const Cart = () => {
   const [cartItems, setCartItems] = useState<CartProduct[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string>('');
+  const [error, setError] = useState<string>("");
   const [totalPrice, setTotalPrice] = useState(0);
 
   const socket = getSocket();
   useEffect(() => {
-    socket.on('connect', () => {
-      console.log('connected');
-    });
-
-    socket.on('cart-data', (cart: ResponseCart) => {
+    socket.on("cart-data", (cart: ResponseCart) => {
       setCartItems(cart.cartDetails);
       setTotalPrice(cart.totalValue);
     });
-    
-    socket.emit('get-cart');
+
+    socket.emit("get-cart");
     setIsLoading(false);
-  },[]);
+  }, [socket]);
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-2xl font-bold mb-8">Your Cart</h1>
