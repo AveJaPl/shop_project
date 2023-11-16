@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, {useState } from "react";
 import { loginUser } from "@/services/login";
 import { useRouter } from "next/navigation";
 import { getSocket } from "@/services/getSocket";
@@ -9,7 +9,6 @@ const Login = () => {
   const [password, setPassword] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-
 
   const router = useRouter();
 
@@ -21,6 +20,9 @@ const Login = () => {
       const response = await loginUser(email, password);
 
       if (response.status === 200) {
+        const socket = getSocket();
+        socket.connect();
+        socket.emit("login");
         router.push("/dashboard");
       } else {
         setError(response.data.message || "An error occurred");

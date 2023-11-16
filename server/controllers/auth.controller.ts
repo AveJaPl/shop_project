@@ -5,7 +5,6 @@ import jwt from "jsonwebtoken";
 
 const prisma = new PrismaClient();
 
-
 const login = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
@@ -24,7 +23,9 @@ const login = async (req: Request, res: Response) => {
     }
 
     if (!process.env.JWT_SECRET) {
-      throw new Error('JWT_SECRET is not defined in the environment variables.');
+      throw new Error(
+        "JWT_SECRET is not defined in the environment variables."
+      );
     }
 
     const token = jwt.sign(
@@ -34,15 +35,14 @@ const login = async (req: Request, res: Response) => {
         expiresIn: "1d",
       }
     );
-    res.cookie('token', token, {
+    res.cookie("token", token, {
       httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24,
       sameSite: "lax",
-      path: "/"
-    })
+      path: "/",
+    });
 
     res.json({ message: "Login successful." });
-
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Something went wrong" });
@@ -73,25 +73,21 @@ const register = async (req: Request, res: Response) => {
         name,
         surname,
         email,
-        password: hashedPassword
-      }
+        password: hashedPassword,
+      },
     });
 
-    res.status(201).json({ message: "User registered successfully.", userId: newUser.id });
-
+    res
+      .status(201)
+      .json({ message: "User registered successfully.", userId: newUser.id });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Something went wrong" });
   }
 };
 
-
 const resetPassword = (req: Request, res: Response) => {
   res.send("Reset Password endpoint.");
 };
 
-export {
-  login,
-  register,
-  resetPassword
-};
+export { login, register, resetPassword };

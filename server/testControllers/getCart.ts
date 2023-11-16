@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 const getCart = async (userId: number) => {
     try {
       // Pobieranie szczegółów koszyka
-      const cart = await prisma.carts.findUnique({
+      const cart = (await prisma.carts.findUnique({
         where: {
           userId,
         },
@@ -21,10 +21,24 @@ const getCart = async (userId: number) => {
             },
           },
         },
+      })) || await prisma.carts.create({
+        data: {
+          userId,
+        },
+        include: {
+          cartDetails: {
+            include: {
+              product: {
+                select: {
+                  name: true,
+                  price: true,
+                },
+              },
+            },
+          },
+        },
       });
-  
-      // Sprawdzenie, czy koszyk istnieje
-      if (!cart) throw new Error("Cart not found" );
+
   
       // Obliczanie całkowitej wartości koszyka
       let totalValue = 0;

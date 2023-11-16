@@ -15,7 +15,6 @@ function NewArrivals() {
   useEffect(() => {
     const fetchNewArrivals = async () => {
       const response = await getNewArrivalProducts();
-      console.log("odpowiedz", response);
       setNewArrivals(response);
     };
     fetchNewArrivals();

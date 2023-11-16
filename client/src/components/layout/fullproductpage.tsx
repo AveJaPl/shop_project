@@ -1,7 +1,6 @@
 import React from 'react';
 import { Product } from '@/types/product';
 import Image from 'next/image';
-import { addToCart } from '@/services/cart';
 import { getSocket } from '@/services/getSocket';
 
 const FullProductPage: React.FC<{ product: Product }> = ({product }) => {

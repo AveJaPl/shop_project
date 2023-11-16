@@ -27,15 +27,17 @@ export const initializeWebsocket = (httpServer: HttpServer) => {
       }
 
       const decoded = verifyJWTForWebSocket(token);
+      if (!decoded) {
+        socket.disconnect();
+        return;
+      }
+
       userId = decoded.id;
-
       const roomName = `user-${userId}`;
-
       socket.join(roomName);
 
       socket.on("get-cart", async () => {
         const cart = await getCart(userId);
-        console.log('wywołano get cart');
         io.to(roomName).emit("cart-data", cart);
       });
 
@@ -48,8 +50,17 @@ export const initializeWebsocket = (httpServer: HttpServer) => {
       socket.on("add-to-cart", async (productId: number) => {
         await addToCart(userId, productId);
         const updatedCart = await getCart(userId);
-        console.log(updatedCart.cartDetails.length);
+        console.log("długość koszyka: ",updatedCart.cartDetails.length);
         io.to(roomName).emit("cart-data", updatedCart);
+      });
+
+      socket.on("logout", () => {
+        io.to(roomName).emit("cart-data", { cartDetails: [], totalValue: 0 });
+      });
+
+      socket.on("login", async () => {
+        const cart = await getCart(userId);
+        io.to(roomName).emit("cart-data", cart);
       });
 
     } catch (error) {
