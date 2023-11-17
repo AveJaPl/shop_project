@@ -14,6 +14,7 @@ export const initializeWebsocket = (httpServer: HttpServer) => {
     try {
       let cookies = socket.handshake.headers.cookie;
       if (!cookies) {
+        console.log("No cookies");
         socket.disconnect();
         return;
       }
@@ -22,12 +23,14 @@ export const initializeWebsocket = (httpServer: HttpServer) => {
       let token = parsedCookies.token;
       let userId: number;
       if (!token) {
+        console.log("No token");
         socket.disconnect();
         return;
       }
 
       const decoded = verifyJWTForWebSocket(token);
       if (!decoded) {
+        console.log("Invalid token");
         socket.disconnect();
         return;
       }
@@ -52,7 +55,9 @@ export const initializeWebsocket = (httpServer: HttpServer) => {
           await addToCart(userId, productId);
           const updatedCart = await getCart(userId);
           io.to(roomName).emit("cart-data", updatedCart);
+          console.log("Added to cart");
         } catch (error) {
+          console.log(error);
           socket.emit("add-to-cart-failed", "Failed to add to cart");
         }
       });
