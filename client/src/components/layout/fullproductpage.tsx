@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { Product } from '@/types/product';
 import Image from 'next/image';
 import { getSocket } from '@/services/getSocket';
@@ -8,6 +8,8 @@ const FullProductPage: React.FC<{ product: Product }> = ({product }) => {
   const stockIndicatorColor = inStock ? 'text-green-500' : 'text-red-500';
   const stockText = inStock ? 'In Stock' : 'Out of Stock';
   const isLongName = product.name.length > 20;
+  const [addedToCart, setAddedToCart] = useState(false);
+
   const socket = getSocket()
   const handleAddToCart = async() =>{
     try{
@@ -17,6 +19,13 @@ const FullProductPage: React.FC<{ product: Product }> = ({product }) => {
     }
 
   }
+
+  useEffect(() => {
+    socket.on('add-to-cart', () => {
+      console.log('added to cart')
+      setAddedToCart(true)
+    })
+  }, [socket])
 
   return (
     <div className="sm:w-3/4 md:w-2/3 lg:w-3/5 xl:w-2/5 mx-auto p-4 flex flex-col justify-center items-center">
@@ -58,6 +67,12 @@ const FullProductPage: React.FC<{ product: Product }> = ({product }) => {
         <h1 className='font-bold text-xl'>Description</h1>
         <p className="text-md">{product.description}</p>
       </div>
+      {addedToCart && (
+      <div className="fixed bottom-10 right-10 bg-green-100 border-l-4 border-green-500 text-green-700 p-4" role="alert">
+        <p className="font-bold">Success</p>
+        <p>Product added to cart!</p>
+      </div>
+    )}
     </div>
   );
 };
