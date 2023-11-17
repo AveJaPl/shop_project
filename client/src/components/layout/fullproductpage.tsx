@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Product } from "@/types/product";
+import { Product, ResponseCart } from "@/types/product";
 import Image from "next/image";
 import { getSocket } from "@/services/getSocket";
 
@@ -9,7 +9,7 @@ const FullProductPage: React.FC<{ product: Product }> = ({ product }) => {
   const stockText = inStock ? "In Stock" : "Out of Stock";
   const isLongName = product.name.length > 20;
   const [addedToCart, setAddedToCart] = useState(false);
-
+  const [infoVisible, setInfoVisible] = useState(false);
   const socket = getSocket();
   const handleAddToCart = async () => {
     try {
@@ -20,16 +20,28 @@ const FullProductPage: React.FC<{ product: Product }> = ({ product }) => {
   };
 
   useEffect(() => {
-    socket.on("add-to-cart", () => {
-      let timer;
-
-      timer = setTimeout(() => {
-        setAddedToCart(false);
+    const onAddToCartSuccess = (updatedCart: ResponseCart) => {
+      setAddedToCart(true);
+      setInfoVisible(true);
+      setTimeout(() => {
+        setInfoVisible(false);
       }, 3000);
-    });
+      setTimeout(() => {
+        setAddedToCart(false);
+      }, 3500);
+    }
+
+    const onAddToCartError = (error: string) => {
+      console.log(error);
+    }
+
+    socket.on('cart-data', onAddToCartSuccess)
+    socket.on('add-to-cart-failed', onAddToCartError)
+
     return () => {
-      clearTimeout(timer);
-    };
+      socket.off('cart-data', onAddToCartSuccess)
+      socket.off('add-to-cart-failed', onAddToCartError)
+    }
   }, [socket]);
 
   return (
@@ -84,12 +96,12 @@ const FullProductPage: React.FC<{ product: Product }> = ({ product }) => {
       </div>
       {addedToCart && (
         <div
-          className="fixed bottom-10 right-10 bg-green-100 border-l-4 border-green-500 text-green-700 p-4"
-          role="alert"
-        >
-          <p className="font-bold">Success</p>
-          <p>Product added to cart!</p>
-        </div>
+        className={`fixed bottom-10 right-10 bg-green-100 border-l-4 border-green-500 text-green-700 p-4 ${infoVisible ? 'slide-in' : 'slide-out'}`}
+        role="alert"
+      >
+        <p className="font-bold">Success</p>
+        <p>Product added to cart!</p>
+      </div>
       )}
     </div>
   );

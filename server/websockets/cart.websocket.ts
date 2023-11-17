@@ -48,10 +48,13 @@ export const initializeWebsocket = (httpServer: HttpServer) => {
       });
 
       socket.on("add-to-cart", async (productId: number) => {
-        await addToCart(userId, productId);
-        const updatedCart = await getCart(userId);
-        console.log("długość koszyka: ",updatedCart.cartDetails.length);
-        io.to(roomName).emit("cart-data", updatedCart);
+        try{
+          await addToCart(userId, productId);
+          const updatedCart = await getCart(userId);
+          io.to(roomName).emit("cart-data", updatedCart);
+        } catch (error) {
+          socket.emit("add-to-cart-failed", "Failed to add to cart");
+        }
       });
 
       socket.on("logout", () => {
